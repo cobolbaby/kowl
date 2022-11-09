@@ -101,10 +101,10 @@ func (*defaultHooks) CanSeeTopic(_ context.Context, _ string) (bool, *rest.Error
 	return true, nil
 }
 func (*defaultHooks) CanCreateTopic(_ context.Context, _ string) (bool, *rest.Error) {
-	return true, nil
+	return false, nil
 }
 func (*defaultHooks) CanDeleteTopic(_ context.Context, _ string) (bool, *rest.Error) {
-	return true, nil
+	return false, nil
 }
 func (*defaultHooks) CanPublishTopicRecords(_ context.Context, _ string) (bool, *rest.Error) {
 	return true, nil
@@ -129,7 +129,10 @@ func (*defaultHooks) CanViewTopicConsumers(_ context.Context, _ string) (bool, *
 }
 func (*defaultHooks) AllowedTopicActions(_ context.Context, _ string) ([]string, *rest.Error) {
 	// "all" will be considered as wild card - all actions are allowed
-	return []string{"all"}, nil
+	// return []string{"all"}, nil
+	return []string{
+		"seeTopic", "viewPartitions", "viewConfig", "viewMessages", "useSearchFilter", "viewConsumers",
+	}, nil
 }
 func (*defaultHooks) PrintListMessagesAuditLog(_ *http.Request, _ *owl.ListMessageRequest) {}
 func (*defaultHooks) CanListACLs(_ context.Context) (bool, *rest.Error) {
