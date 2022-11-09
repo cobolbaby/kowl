@@ -8,6 +8,7 @@ WORKDIR /app
 
 COPY ./backend/go.mod .
 COPY ./backend/go.sum .
+RUN go env -w GOPROXY=http://nexus.itc.inventec.net/repository/go-proxy/,https://goproxy.cn,direct
 RUN go mod download
 
 COPY ./backend .
@@ -25,6 +26,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 COPY ./frontend/package.json ./package.json
 COPY ./frontend/package-lock.json ./package-lock.json
+RUN npm config set registry http://npm.itc.inventec \
+    && npm config set noproxy npm.itc.inventec
 RUN npm install
 
 
@@ -80,6 +83,6 @@ COPY --from=frontendBuilder /app/build/ /app/build
 
 # Add github.com to known SSH hosts by default (required for pulling topic docs & proto files from a Git repo)
 RUN apk update && apk add --no-cache openssh
-RUN ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
+# RUN ssh-keyscan -t rsa github.com >> /etc/ssh/ssh_known_hosts
 
 ENTRYPOINT ["./kowl"]
